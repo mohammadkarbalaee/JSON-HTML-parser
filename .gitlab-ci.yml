@@ -1,0 +1,20 @@
+stages:
+  - analysis
+  - test
+
+junit:
+  stage: test
+  image: gradle
+  script:
+    - mkdir ./logs
+    - ./gradlew test > ./logs/test_logs.log
+    - cat ./logs/test-logs.log
+  artifacts:
+    paths:
+      - ./logs/test_logs.log
+    expire_in: 1 day
+    when: on_failure
+  only:
+    - pushes
+    - merge_request
+    - master
