@@ -9,4 +9,12 @@ public class JsonParser {
         // TODO implement this
         return null;
     }
+
+    /*
+    * this function is the opposite of above function. implementing this has no score and
+    * is only for those who want to practice more.
+     */
+    public static String toJsonString(Json data) {
+        return null;
+    }
 }

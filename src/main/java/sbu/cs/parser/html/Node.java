@@ -1,5 +1,7 @@
 package sbu.cs.parser.html;
 
+import java.util.List;
+
 public class Node implements NodeInterface {
 
     /*
@@ -11,8 +13,16 @@ public class Node implements NodeInterface {
     * if there is nothing inside tag then null will be returned
      */
     @Override
-    public String getStringValue() {
+    public String getStringInside() {
         // TODO implement this
+        return null;
+    }
+
+    /*
+    *
+     */
+    @Override
+    public List<Node> getChildren() {
         return null;
     }
 
