@@ -195,3 +195,6 @@ gradle-app.setting
 # Self added
 .idea/
 .idea
+
+# Ignore Gradle build output directory
+build
