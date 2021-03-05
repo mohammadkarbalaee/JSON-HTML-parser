@@ -22,7 +22,7 @@ class NodeTest {
             "\n" +
             "<p>The width and height attributes of the img tag, defines the width and height of the image:</p>\n" +
             "\n" +
-            "<img src=\"img_girl.jpg\" width=\"500\" height=\"600\">\n" +
+            "</img src=\"img_girl.jpg\" width=\"500\" height=\"600\">\n" +
             "\n" +
             "</body>\n" +
             "</html>";
@@ -35,11 +35,11 @@ class NodeTest {
             "\n" +
             "<form action=\"/action_page.php\">\n" +
             "  <label for=\"fname\">First name:</label>\n" +
-            "  <input type=\"text\" id=\"fname\" name=\"fname\"><br><br>\n" +
+            "  </input type=\"text\" id=\"fname\" name=\"fname\"></br></br>\n" +
             "  <label for=\"lname\">Last name:</label>\n" +
-            "  <input type=\"text\" id=\"lname\" name=\"lname\"><br><br>\n" +
-            "  <input type=\"submit\" value=\"Submit\">\n" +
-            "  <input type=\"submit\" formaction=\"/action_page2.php\" value=\"Submit as Admin\">\n" +
+            "  </input type=\"text\" id=\"lname\" name=\"lname\"></br></br>\n" +
+            "  </input type=\"submit\" value=\"Submit\">\n" +
+            "  </input type=\"submit\" formaction=\"/action_page2.php\" value=\"Submit as Admin\">\n" +
             "</form>\n" +
             "\n" +
             "</body>\n" +

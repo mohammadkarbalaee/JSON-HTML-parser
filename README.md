@@ -24,7 +24,7 @@ implement classes in sbu.cs.parser.json package.
    for values.
    
 * write a json parser which can parse json that have a key mapped to
-   another json. (6th possible value type, another object)
+   another json.  
 
 ## dom
 implement classes in sbu.cs.parser.html package.
@@ -37,3 +37,12 @@ implement classes in sbu.cs.parser.html package.
 #### more score
 * implement function toHTMLString that gets a Dom object (Node root) and 
     return a String that is the html representation of dom object (opposite of parse)
+
+
+---
+## String trim function
+```java
+String str = "  salam ";
+System.out.println(str.trim());     // will print 'salam'
+```  
+read about this function. you may need what it does in this series.
