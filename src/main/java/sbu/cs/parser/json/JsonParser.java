@@ -1,20 +1,41 @@
 package sbu.cs.parser.json;
 
-public class JsonParser {
+import java.util.ArrayList;
 
-    /*
-    * this function will get a String and returns a Json object
-     */
-    public static Json parse(String data) {
-        // TODO implement this
-        return null;
-    }
-
-    /*
-    * this function is the opposite of above function. implementing this has no score and
-    * is only for those who want to practice more.
-     */
-    public static String toJsonString(Json data) {
-        return null;
+public class JsonParser
+{
+    private static ArrayList<JsonElement> elementsList = new ArrayList<>();
+    public static Json parse(String data)
+    {
+        String tempStr = data;
+        StringBuilder temp = new StringBuilder(tempStr);
+        for (int i = 0; i < temp.length(); i++)
+        {
+            if (temp.charAt(i) == '[')
+            {
+                for (int j = i + 1; temp.charAt(j) != ']'; j++)
+                {
+                    if (temp.charAt(j) == ',')
+                    {
+                        temp.setCharAt(j,'@');
+                    }
+                }
+            }
+        }
+        data = temp.toString();
+        data = data.replaceAll("(\\{)|(})","");
+        String[] keyAndValuePairs = data.split(",");
+        for (String keyAndValuePair : keyAndValuePairs)
+        {
+            String[] separated = keyAndValuePair.split(":");
+            separated[0] = separated[0].trim();
+            separated[1] = separated[1].trim();
+            separated[0] = separated[0].replaceAll("\"","");
+            separated[1] = separated[1].replaceAll("\"","");
+            separated[1] = separated[1].replaceAll("@",",");
+            JsonElement element = new JsonElement(separated[0],separated[1]);
+            elementsList.add(element);
+        }
+        return new Json(elementsList);
     }
 }
