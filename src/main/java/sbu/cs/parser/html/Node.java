@@ -1,39 +1,99 @@
 package sbu.cs.parser.html;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Node implements NodeInterface {
+public class Node implements NodeInterface
+{
 
-    /*
-    * this function will return all that exists inside a tag
-    * for example for <html><body><p>hi</p></body></html>, if we are on
-    * html tag this function will return <body><p1>hi</p1></body> and if we are on
-    * body tag this function will return <p1>hi</p1> and if we are on
-    * p tag this function will return hi
-    * if there is nothing inside tag then null will be returned
-     */
-    @Override
-    public String getStringInside() {
-        // TODO implement this
-        return null;
+    private List<Node> children = null;
+    private String value;
+
+    public Node(String value)
+    {
+        this.children = new ArrayList<>();
+        this.value = value;
     }
 
-    /*
-    *
-     */
-    @Override
-    public List<Node> getChildren() {
-        return null;
+    public void addChild(Node child)
+    {
+        children.add(child);
     }
 
-    /*
-    * in html tags all attributes are in key value shape. this function will get a attribute key
-    * and return it's value as String.
-    * for example <img src="img.png" width="400" height="500">
-     */
+//    public String getStartTag()
+//    {
+//        return "<" + tagName() + attributes() + ">";
+//    }
+//
+//    public String getEndTag()
+//    {
+//        return "</" + tagName() + ">";
+//    }
+
+    private String attributes()
+    {
+        int endOfStartTag = 0;
+        for (int i = 0; value.charAt(i) != '>'; i++)
+            endOfStartTag++;
+        String startTag = value.substring(0, endOfStartTag + 1);
+        return StringUtils.substringBetween(startTag, tagName(), ">");
+    }
+
+    private String tagName()
+    {
+        int charCounter = 0;
+        for (int i  = 1; value.charAt(i) != '>' && value.charAt(i) != 32; i++)
+            charCounter++;
+        return value.substring(1,charCounter + 1);
+    }
+
     @Override
-    public String getAttributeValue(String key) {
-        // TODO implement this
-        return null;
+    public String getStringInside()
+    {
+        String startTag = "<" + tagName() + attributes() + ">";
+        String endTag = "</" + tagName() + ">";
+        return StringUtils.substringBetween(value, startTag, endTag);
+    }
+
+    @Override
+    public List<Node> getChildren()
+    {
+        return children;
+    }
+
+    private ArrayList<String> attributesParser()
+    {
+        ArrayList<String> attributesList = new ArrayList<>();
+        String trimmedAttributes = attributes().trim();
+        String[] keyAndValuePair = trimmedAttributes.split(" ");
+        for (String temp : keyAndValuePair)
+        {
+            String[] tmpStr = temp.split("=");
+            attributesList.add(tmpStr[0]);
+            attributesList.add(tmpStr[1]);
+        }
+        return attributesList;
+    }
+
+    private Map<String,String> attributesHashmap()
+    {
+        HashMap<String,String> attributesPair = new HashMap<>();
+        ArrayList<String> parsedAttributes = attributesParser();
+        for (int i = 0; i < parsedAttributes.size(); i += 2)
+        {
+            attributesPair.put(parsedAttributes.get(i),parsedAttributes.get(i + 1));
+        }
+        return attributesPair;
+    }
+
+    @Override
+    public String getAttributeValue(String key)
+    {
+        Map<String,String> attributesPair = attributesHashmap();
+        return attributesPair.get(key);
     }
 }
