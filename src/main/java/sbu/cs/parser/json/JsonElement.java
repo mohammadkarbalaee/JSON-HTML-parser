@@ -2,10 +2,10 @@ package sbu.cs.parser.json;
 
 public class JsonElement
 {
-    private String key;
-    private String value;
+    protected String key;
+    protected String value;
 
-    public JsonElement(String key,String value)
+    public JsonElement(String key, String value)
     {
         this.key = key;
         this.value = value;
