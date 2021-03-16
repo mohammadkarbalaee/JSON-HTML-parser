@@ -24,16 +24,6 @@ public class Node implements NodeInterface
         children.add(child);
     }
 
-//    public String getStartTag()
-//    {
-//        return "<" + tagName() + attributes() + ">";
-//    }
-//
-//    public String getEndTag()
-//    {
-//        return "</" + tagName() + ">";
-//    }
-
     private String attributes()
     {
         int endOfStartTag = 0;
