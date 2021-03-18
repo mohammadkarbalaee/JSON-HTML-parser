@@ -52,19 +52,26 @@ public class Node implements NodeInterface
     @Override
     public List<Node> getChildren()
     {
-        return children;
+        for(int i = 0; i < children.size(); i++)
+        {
+            Node temp = HTMLParser.parse(children.get(i).value);
+            children.set(i, temp);
+        }
+        List<Node> resultList = children;
+        return resultList;
+
     }
 
     private ArrayList<String> attributesParser()
     {
         ArrayList<String> attributesList = new ArrayList<>();
         String trimmedAttributes = attributes().trim();
-        String[] keyAndValuePair = trimmedAttributes.split(" ");
+        String[] keyAndValuePair = trimmedAttributes.split("\" ");
         for (String temp : keyAndValuePair)
         {
             String[] tmpStr = temp.split("=");
-            attributesList.add(tmpStr[0]);
-            attributesList.add(tmpStr[1]);
+            attributesList.add(tmpStr[0].replaceAll("\"",""));
+            attributesList.add(tmpStr[1].replaceAll("\"",""));
         }
         return attributesList;
     }
