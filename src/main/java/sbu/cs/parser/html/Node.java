@@ -41,6 +41,16 @@ public class Node implements NodeInterface
         return value.substring(1,charCounter + 1);
     }
 
+    public String getStartTag()
+    {
+        return "<" + tagName() + attributes() + ">";
+    }
+
+    public String getEndTag()
+    {
+        return "</" + tagName() + ">";
+    }
+
     @Override
     public String getStringInside()
     {

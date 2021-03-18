@@ -25,7 +25,7 @@ public class HTMLParser
         return "<" + tagName(tag) + attributes(tag) + ">";
     }
 
-    private static String getEngTag(String tag)
+    private static String getEndTag(String tag)
     {
         return "</" + tagName(tag) + ">";
     }
@@ -58,32 +58,25 @@ public class HTMLParser
 
     private static String removeEndAndStartTagName(String htmlText)
     {
-        return htmlText.replaceFirst(getStartTag(htmlText), "").replaceFirst(getEngTag(htmlText), "");
+        return htmlText.replaceFirst(getStartTag(htmlText), "").replaceFirst(getEndTag(htmlText), "");
     }
 
     private static String removeTag(String htmlText)
     {
         if (getStartTag(htmlText).indexOf('<') + 1 == getStartTag(htmlText).indexOf('/'))
             return htmlText.replaceFirst(getStartTag(htmlText), "").trim();
-        return htmlText.replaceFirst(getStartTag(htmlText) +getStringInside(htmlText) + getEngTag(htmlText), "").trim();
+        return htmlText.replaceFirst(getStartTag(htmlText) +getStringInside(htmlText) + getEndTag(htmlText), "").trim();
     }
 
     private static Node initializeNode(String htmlText)
     {
         if (getStartTag(htmlText).indexOf('<') + 1 == getStartTag(htmlText).indexOf('/'))
             return new Node((getStartTag(htmlText) + getStringInside(htmlText)).trim());
-        return new Node(getStartTag(htmlText) + getStringInside(htmlText) + getEngTag(htmlText));
+        return new Node(getStartTag(htmlText) + getStringInside(htmlText) + getEndTag(htmlText));
     }
 
-
-    /*
-    * a function that will return string representation of dom object.
-    * only implement this after all other functions been implemented because this
-    * impl is not required for this series of exercises. this is for more score
-     */
     public static String toHTMLString(Node root)
     {
-        // TODO implement this for more score
-        return null;
+        return root.getStartTag() + root.getStringInside() + root.getEndTag();
     }
 }
