@@ -2,17 +2,16 @@ package sbu.cs.parser.json.map;
 
 import java.util.ArrayList;
 
-public class Map<E> {
-
+public class Map {
   private ArrayList<String> keys;
-  private ArrayList<E> values;
+  private ArrayList<String> values;
 
   public Map() {
     this.keys = new ArrayList<>();
     this.values = new ArrayList<>();
   }
 
-  public void put(String newKey, E newValue) {
+  public void put(String newKey,String newValue) {
     if (isNewKey(newKey)) {
       this.keys.add(newKey);
       this.values.add(newValue);
@@ -21,7 +20,7 @@ public class Map<E> {
     }
   }
 
-  public E get(String key) {
+  public String get(String key) {
     return this.values.get(this.keys.indexOf(key));
   }
 
@@ -45,7 +44,7 @@ public class Map<E> {
     return this.keys;
   }
 
-  public ArrayList<E> getValues() {
+  public ArrayList<String> getValues() {
     return this.values;
   }
 
@@ -53,7 +52,7 @@ public class Map<E> {
     this.keys = keys;
   }
 
-  public void setValues(ArrayList<E> values) {
+  public void setValues(ArrayList<String> values) {
     this.values = values;
   }
 }
