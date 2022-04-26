@@ -8,7 +8,8 @@ public class JsonParser {
       for (String pair: keyValuePairs) {
         pair = pair.replaceAll("[{}]","");
         String[] parsed = pair.split(":");
-        builtJson.add(parsed[0].trim(),parsed[1].trim());
+        builtJson.add(parsed[0].trim().replaceAll("\"","")
+            ,parsed[1].trim().replaceAll("\"",""));
       }
       return builtJson;
     }

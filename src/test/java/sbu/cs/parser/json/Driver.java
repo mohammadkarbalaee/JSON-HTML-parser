@@ -6,5 +6,6 @@ public class Driver {
     Json json = JsonParser.parse(jsonString);
     System.out.println(json.getPairs().getKeys());
     System.out.println(json.getPairs().getValues());
+    System.out.println(json.getIntegerValue("age"));
   }
 }
