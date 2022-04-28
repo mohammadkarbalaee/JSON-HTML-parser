@@ -2,6 +2,8 @@ package sbu.cs.parser.json;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class JsonTest {
@@ -33,5 +35,16 @@ class JsonTest {
         assertEquals("sahar", json.getStringValue("name"));
         assertEquals("20", json.getStringValue("age"));
         assertEquals("null", json.getStringValue("address"));
+    }
+
+    @Test
+    void jsonWithType() {
+        String jsonString = "{\"name\": \"sahar\", \"age\":20, \"arr\": [1,\"yes\",false,2.5,true]}";
+        Json json = JsonParser.parse(jsonString);
+        assert json != null;
+        assertEquals(20,(Integer) json.get("age"));
+        assertEquals("sahar",(String) json.get("name"));
+        ArrayList list = (ArrayList) json.get("arr");
+        assertEquals(5,list.size());
     }
 }
