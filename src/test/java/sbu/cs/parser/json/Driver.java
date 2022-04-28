@@ -24,16 +24,16 @@ public class Driver {
 //      System.out.println(obj.getClass());
 //    }
 
-//    String sampleHTML1 = "<html>\n" +
-//        "<body>\n" +
-//        "\n" +
-//        "<p>This text is normal.</p>\n" +
-//        "\n" +
-//        "<p><b>This text is bold.</b></p>\n" +
-//        "\n" +
-//        "</body>\n" +
-//        "</html>";
-//    Node node = HTMLParser.parse(sampleHTML1);
-//    System.out.println(HTMLParser.toHTMLString(node));
+    String sampleHTML1 = "<html>\n" +
+        "<body>\n" +
+        "\n" +
+        "<p>This text is normal.</p>\n" +
+        "\n" +
+        "<p><b>This text is bold.</b></p>\n" +
+        "\n" +
+        "</body>\n" +
+        "</html>";
+    Node node = HTMLParser.parse(sampleHTML1);
+    System.out.println(HTMLParser.toHTMLString(node));
   }
 }

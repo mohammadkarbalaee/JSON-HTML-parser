@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Node implements NodeInterface {
     private final List<Node> children;
@@ -20,8 +19,7 @@ public class Node implements NodeInterface {
         return closingTag;
     }
 
-    public Node(String htmlString, String openingTag,
-                String closingTag) {
+    public Node(String htmlString, String openingTag, String closingTag) {
         this.htmlString = htmlString;
         this.closingTag = closingTag;
         this.openingTag = openingTag;
