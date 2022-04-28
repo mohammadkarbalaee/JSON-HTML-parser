@@ -2,6 +2,7 @@ package sbu.cs.parser.json;
 
 import sbu.cs.parser.json.map.Map;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +63,19 @@ public class Json implements JsonInterface {
             throw
                 new WrongValueTypeRequestedException("The value you requested is not of type Double");
         }
+    }
+
+    public ArrayList getList(String key) throws WrongValueTypeRequestedException {
+        String stringValue = this.pairs.get(key);
+        if (stringValue.startsWith("[")) {
+
+        } else if (stringValue.equals("null")) {
+            return null;
+        } else {
+            throw
+                new WrongValueTypeRequestedException("The value you requested is not a list");
+        }
+        return null;
     }
 
     public void add(String key,String value) {

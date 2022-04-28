@@ -79,9 +79,9 @@ class NodeTest {
         assertEquals("fname", node.getChildren().get(0).getAttributeValue("for"));
         assertEquals("text", node.getChildren().get(1).getAttributeValue("type"));
         assertEquals("fname", node.getChildren().get(1).getAttributeValue("name"));
-        assertEquals("lname", node.getChildren().get(2).getAttributeValue("for"));
-        assertEquals("submit", node.getChildren().get(5).getAttributeValue("type"));
-        assertEquals("/action_page2.php", node.getChildren().get(5).getAttributeValue("formaction"));
-        assertEquals("Submit as Admin", node.getChildren().get(5).getAttributeValue("value"));
+        assertEquals("lname", node.getChildren().get(4).getAttributeValue("for"));
+        assertEquals("submit", node.getChildren().get(9).getAttributeValue("type"));
+        assertEquals("/action_page2.php", node.getChildren().get(9).getAttributeValue("formaction"));
+        assertEquals("Submit as Admin", node.getChildren().get(9).getAttributeValue("value"));
     }
 }
