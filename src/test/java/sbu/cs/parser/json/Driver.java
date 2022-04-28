@@ -6,8 +6,5 @@ public class Driver {
     Json json = JsonParser.parse(jsonString);
 //    System.out.println(json.getPairs().getKeys());
 //    System.out.println(json.getPairs().getValues());
-    for (Object temp: json.getList("address")) {
-      System.out.println(temp.getClass());
-    }
   }
 }

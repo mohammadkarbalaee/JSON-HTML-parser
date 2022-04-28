@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class Map {
   private ArrayList<String> keys;
-  private ArrayList<String> values;
+  private ArrayList values;
 
   public Map() {
     this.keys = new ArrayList<>();
     this.values = new ArrayList<>();
   }
 
-  public void put(String newKey,String newValue) {
+  public void put(String newKey,Object newValue) {
     if (isNewKey(newKey)) {
       this.keys.add(newKey);
       this.values.add(newValue);
@@ -20,7 +20,7 @@ public class Map {
     }
   }
 
-  public String get(String key) {
+  public Object get(String key) {
     return this.values.get(this.keys.indexOf(key));
   }
 
@@ -44,7 +44,7 @@ public class Map {
     return this.keys;
   }
 
-  public ArrayList<String> getValues() {
+  public ArrayList getValues() {
     return this.values;
   }
 
@@ -52,7 +52,7 @@ public class Map {
     this.keys = keys;
   }
 
-  public void setValues(ArrayList<String> values) {
+  public void setValues(ArrayList values) {
     this.values = values;
   }
 }
