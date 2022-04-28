@@ -7,8 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Json implements JsonInterface {
-    private Pattern pattern;
-    private Matcher matcher;
     private final Map pairs;
 
     public Json() {
@@ -22,9 +20,7 @@ public class Json implements JsonInterface {
 
     public Integer getIntegerValue(String key) throws WrongValueTypeRequestedException {
         String stringValue = this.pairs.get(key);
-        pattern = Pattern.compile("[0-9]*");
-        matcher = pattern.matcher(stringValue);
-        if (matcher.matches()) {
+        if (isInt(stringValue)) {
             return Integer.valueOf(stringValue);
         } else if (stringValue.equals("null")) {
             return null;
@@ -36,8 +32,7 @@ public class Json implements JsonInterface {
 
     public Boolean getBooleanValue(String key) throws WrongValueTypeRequestedException {
         String stringValue = this.pairs.get(key);
-        if (stringValue.equals("true") ||
-            stringValue.equals("false")) {
+        if (this.isBoolean(stringValue)) {
             return Boolean.valueOf(stringValue);
         } else if (stringValue.equals("null")) {
             return null;
@@ -53,9 +48,7 @@ public class Json implements JsonInterface {
 
     public Double getDoubleValue(String key) throws WrongValueTypeRequestedException {
         String stringValue = this.pairs.get(key);
-        pattern = Pattern.compile("[0-9]*\\\\.?[0-9]+$");
-        matcher = pattern.matcher(stringValue);
-        if (matcher.matches()) {
+        if (isDouble(stringValue)) {
             return Double.valueOf(stringValue);
         } else if (stringValue.equals("null")) {
             return null;
@@ -68,17 +61,50 @@ public class Json implements JsonInterface {
     public ArrayList getList(String key) throws WrongValueTypeRequestedException {
         String stringValue = this.pairs.get(key);
         if (stringValue.startsWith("[")) {
-
+            ArrayList valueList = new ArrayList();
+            stringValue = stringValue.replaceAll("[\\[\\]]","");
+            String[] values = stringValue.split(",");
+            for (String value: values) {
+                if (this.isBoolean(value)) {
+                    valueList.add(Boolean.parseBoolean(value));
+                } else if (value.equals("null")) {
+                    valueList.add(null);
+                } else if (this.isInt(value)) {
+                    valueList.add(Integer.parseInt(value));
+                } else if (this.isDouble(value)) {
+                    valueList.add(Double.parseDouble(value));
+                } else {
+                    valueList.add(value);
+                }
+            }
+            return valueList;
         } else if (stringValue.equals("null")) {
             return null;
         } else {
             throw
                 new WrongValueTypeRequestedException("The value you requested is not a list");
         }
-        return null;
     }
 
     public void add(String key,String value) {
         this.pairs.put(key,value);
+    }
+
+    private boolean isInt(String string) {
+        Pattern intPattern = Pattern.compile("[0-9]*");
+        Matcher matcher = intPattern.matcher(string);
+        return matcher.matches();
+    }
+
+    private boolean isDouble(String string) {
+        Pattern intPattern = Pattern.compile("[0-9]+.[0-9]+");
+        Matcher matcher = intPattern.matcher(string);
+        return matcher.matches();
+    }
+
+    private boolean isBoolean(String string) {
+        Pattern intPattern = Pattern.compile("(true|false)");
+        Matcher matcher = intPattern.matcher(string);
+        return matcher.matches();
     }
 }
