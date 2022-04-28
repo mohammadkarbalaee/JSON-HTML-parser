@@ -9,7 +9,6 @@ import java.util.Map;
 public class Node implements NodeInterface {
     private final List<Node> children;
     private final String htmlString;
-    private final Map<String,String> attributes;
     private final String openingTag;
     private final String closingTag;
 
@@ -22,9 +21,7 @@ public class Node implements NodeInterface {
     }
 
     public Node(String htmlString, String openingTag,
-                String closingTag,
-                Map<String,String> attributes) {
-        this.attributes = attributes;
+                String closingTag) {
         this.htmlString = htmlString;
         this.closingTag = closingTag;
         this.openingTag = openingTag;
@@ -50,6 +47,6 @@ public class Node implements NodeInterface {
 
     @Override
     public String getAttributeValue(String key) {
-        return this.attributes.get(key);
+        return HTMLParser.attributesParser(htmlString).get(key);
     }
 }

@@ -2,55 +2,45 @@ package sbu.cs.parser.html;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HTMLParser {
-
-    private static String htmlString = "";
-
     public static Node parse(String html) {
-        htmlString = html.replaceAll("\n", "").trim();
-        Node madeNode = new Node(htmlString,
-            getStartTag(),
-            getEndTag(),
-            attributesParser());
+        html = html.replaceAll("\n", "").trim();
+        Node madeNode = new Node(html,
+            getStartTag(html),
+            getEndTag(html));
 
-        removeEndAndStartTag();
-        boolean hasTags = (htmlString.contains("<"));
+        html = removeEndAndStartTag(html);
+        boolean hasTags = (html.contains("<"));
         if(!hasTags) {
             return madeNode;
         }
-        while(htmlString.length() > 0) {
-            madeNode.addChild(initializeNode());
-            //String before = htmlString;
-            htmlString = removeTag();
-            //String after = htmlString;
-            //System.out.println(after.equals(before));
+        while(html.length() > 0) {
+            madeNode.addChild(initializeNode(html));
+            html = removeTag(html);
         }
         return madeNode;
     }
 
-    private static String getStartTag() {
-        return "<" + tagName() + attributes() + ">";
+    private static String getStartTag(String html) {
+        return "<" + tagName(html) + attributes(html) + ">";
     }
 
-    private static String getEndTag() {
-        return "</" + tagName() + ">";
+    private static String getEndTag(String html) {
+        return "</" + tagName(html) + ">";
     }
 
-    private static String attributes() {
-        htmlString = htmlString.trim();
+    private static String attributes(String html) {
         int endOfStartTag = 0;
-        for (int i = 0; htmlString.charAt(i) != '>'; i++) {
+        for (int i = 0; html.charAt(i) != '>'; i++)
             endOfStartTag++;
-        }
-        String startTag = htmlString.substring(0, endOfStartTag + 1);
-        return StringUtils.substringBetween(startTag, tagName(), ">");
+        String startTag = html.substring(0, endOfStartTag + 1);
+        return StringUtils.substringBetween(startTag, tagName(html), ">");
     }
 
-    private static String tagName() {
+    private static String tagName(String htmlString) {
         htmlString = htmlString.trim();
         int charCounter = 0;
         for (int i  = 1; htmlString.charAt(i) != '>' && htmlString.charAt(i) != 32; i++)
@@ -58,58 +48,50 @@ public class HTMLParser {
         return htmlString.substring(1,charCounter + 1);
     }
 
-    private static String getStringInside() {
-        String startTag = "<" + tagName() + attributes() + ">";
-        String endTag = "</" + tagName() + ">";
-        return StringUtils.substringBetween(htmlString, startTag, endTag);
+    private static String getStringInside(String html) {
+        String startTag = "<" + tagName(html) + attributes(html) + ">";
+        String endTag = "</" + tagName(html) + ">";
+        return StringUtils.substringBetween(html, startTag, endTag);
     }
 
-    private static void removeEndAndStartTag() {
-        htmlString = htmlString.replaceFirst(getStartTag(), "")
-            .replaceFirst(getEndTag(), "").trim();
+    private static String removeEndAndStartTag(String html) {
+        return html.replaceFirst(getStartTag(html), "")
+            .replaceFirst(getEndTag(html), "").trim();
     }
 
-    private static String removeTag() {
-        String startTag = getStartTag();
-        boolean isSingleTag = startTag.indexOf('<') + 1 == startTag.indexOf('/');
-        System.out.println("opening\n" + startTag);
-        System.out.println("whole\n" + htmlString);
-        if (isSingleTag) {
-            return htmlString.replaceFirst(startTag, "").trim();
-        }
-        return htmlString.replaceFirst(startTag + getStringInside()
-            + getEndTag(), "").trim();
-    }
-
-    private static Node initializeNode() {
-        String startTag = getStartTag();
+    private static String removeTag(String html) {
+        String startTag = getStartTag(html);
         boolean isSingleTag = startTag.indexOf('<') + 1 == startTag.indexOf('/');
         if (isSingleTag) {
-            return new Node((startTag + getStringInside()).trim(),
-                getStartTag(),
-                getEndTag(),
-                attributesParser());
+            return html.replaceFirst(startTag, "").trim();
         }
-        return new Node(startTag + getStringInside() + getEndTag(),
-            getStartTag(),
-            getEndTag(),
-            attributesParser());
+        return html.replaceFirst(startTag + getStringInside(html)
+            + getEndTag(html), "").trim();
     }
 
-    private static Map<String,String> attributesParser() {
-        String attributes = attributes();
-        if (attributes.length() != 0) {
-            String[] keyAndValuePairs = attributes.split("\" ");
-            HashMap<String,String> attributesPair = new HashMap<>();
-            for (String keyValuePair : keyAndValuePairs) {
-                String[] parsePair = keyValuePair.split("=");
-                attributesPair.put(parsePair[0].replaceAll("\"",""),
-                    parsePair[1].replaceAll("\"",""));
-            }
-            return attributesPair;
-        } else {
-         return new HashMap<>();
+    private static Node initializeNode(String html) {
+        String startTag = getStartTag(html);
+        boolean isSingleTag = startTag.indexOf('<') + 1 == startTag.indexOf('/');
+        if (isSingleTag) {
+            return new Node((startTag + getStringInside(html)).trim(),
+                getStartTag(html),
+                getEndTag(html));
         }
+        return new Node(startTag + getStringInside(html) + getEndTag(html),
+            getStartTag(html),
+            getEndTag(html));
+    }
+
+    public static Map<String,String> attributesParser(String htmlString) {
+        String trimmedAttributes = attributes(htmlString).trim();
+        String[] keyAndValuePairs = trimmedAttributes.split("\" ");
+        HashMap<String,String> attributesPair = new HashMap<>();
+        for (String keyValuePair : keyAndValuePairs) {
+            String[] parsePair = keyValuePair.split("=");
+            attributesPair.put(parsePair[0].replaceAll("\"",""),
+                parsePair[1].replaceAll("\"",""));
+        }
+        return attributesPair;
     }
 
     public static String toHTMLString(Node root) {
