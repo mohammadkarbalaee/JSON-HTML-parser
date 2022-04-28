@@ -13,8 +13,12 @@ public class HTMLParser {
     public static Node parse(String html) {
         htmlString = html.replaceAll("\n", "").trim();
         //making a new parent node
+        Node madeNode = new Node(htmlString,
+            getStartTag(),
+            getEndTag(),
+            attributesParser());
+
         removeEndAndStartTag();
-        Node madeNode = new Node(htmlString,attributesParser());
         /*
         because from now on we want to extract the children of
         this node, we delete the starting and closing tags
@@ -29,7 +33,8 @@ public class HTMLParser {
         makes a child node and adds it to its parent
         and then deletes the child node from string html
          */
-        while(htmlString.length() != 0) {
+        while(htmlString.length() > 0) {
+            System.out.println("jjj");
             madeNode.addChild(initializeNode());
             removeTag();
         }
@@ -89,21 +94,31 @@ public class HTMLParser {
         String startTag = getStartTag();
         boolean isSingleTag = startTag.indexOf('<') + 1 == startTag.indexOf('/');
         if (isSingleTag) {
-            return new Node(startTag + getStringInside(),attributesParser());
+            return new Node((startTag + getStringInside()).trim(),
+                getStartTag(),
+                getEndTag(),
+                attributesParser());
         }
-        return new Node(startTag + getStringInside() + getEndTag()
-            ,attributesParser());
+        return new Node(startTag + getStringInside() + getEndTag(),
+            getStartTag(),
+            getEndTag(),
+            attributesParser());
     }
 
     private static Map<String,String> attributesParser() {
-        String[] keyAndValuePairs = attributes().split("\" ");
-        HashMap<String,String> attributesPair = new HashMap<>();
-        for (String keyValuePair : keyAndValuePairs) {
-            String[] parsePair = keyValuePair.split("=");
-            attributesPair.put(parsePair[0].replaceAll("\"",""),
-                parsePair[1].replaceAll("\"",""));
+        String attributes = attributes();
+        if (attributes.length() != 0) {
+            String[] keyAndValuePairs = attributes.split("\" ");
+            HashMap<String,String> attributesPair = new HashMap<>();
+            for (String keyValuePair : keyAndValuePairs) {
+                String[] parsePair = keyValuePair.split("=");
+                attributesPair.put(parsePair[0].replaceAll("\"",""),
+                    parsePair[1].replaceAll("\"",""));
+            }
+            return attributesPair;
+        } else {
+         return new HashMap<>();
         }
-        return attributesPair;
     }
 
 //    public static String toHTMLString(Node root) {
