@@ -5,80 +5,67 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class Node implements NodeInterface
-{
+public class Node implements NodeInterface {
+    private final List<Node> children;
+    private final String htmlText;
 
-    private List<Node> children = null;
-    private String value;
-
-    public Node(String value)
-    {
+    public Node(String value) {
         this.children = new ArrayList<>();
-        this.value = value;
+        this.htmlText = value;
     }
 
-    public void addChild(Node child)
-    {
-        children.add(child);
+    public void addChild(Node child) {
+        this.children.add(child);
     }
 
-    private String attributes()
-    {
+    private String attributes() {
         int endOfStartTag = 0;
-        for (int i = 0; value.charAt(i) != '>'; i++)
+        for (int i = 0; htmlText.charAt(i) != '>'; i++) {
             endOfStartTag++;
-        String startTag = value.substring(0, endOfStartTag + 1);
+        }
+        String startTag = htmlText.substring(0, endOfStartTag + 1);
         return StringUtils.substringBetween(startTag, tagName(), ">");
     }
 
-    private String tagName()
-    {
-        int charCounter = 0;
-        for (int i  = 1; value.charAt(i) != '>' && value.charAt(i) != 32; i++)
-            charCounter++;
-        return value.substring(1,charCounter + 1);
+    private String tagName() {
+        int tagNameLength = 0;
+        for (int i = 1; this.htmlText.charAt(i) != '>' && this.htmlText.charAt(i) != 32; i++) {
+            tagNameLength++;
+        }
+        return this.htmlText.substring(1,tagNameLength + 1);
     }
 
-    public String getStartTag()
-    {
-        return "<" + tagName() + attributes() + ">";
+    public String getStartTag() {
+        return "<" + this.tagName() + this.attributes() + ">";
     }
 
-    public String getEndTag()
-    {
-        return "</" + tagName() + ">";
-    }
-
-    @Override
-    public String getStringInside()
-    {
-        String startTag = "<" + tagName() + attributes() + ">";
-        String endTag = "</" + tagName() + ">";
-        return StringUtils.substringBetween(value, startTag, endTag);
+    public String getEndTag() {
+        return "</" + this.tagName() + ">";
     }
 
     @Override
-    public List<Node> getChildren()
-    {
-        for(int i = 0; i < children.size(); i++)
-        {
-            Node temp = HTMLParser.parse(children.get(i).value);
+    public String getStringInside() {
+        String startTag = this.getStartTag();
+        String endTag = this.getEndTag();
+        return StringUtils.substringBetween(this.htmlText, startTag, endTag);
+    }
+
+    @Override
+    public List<Node> getChildren() {
+        for(int i = 0; i < children.size(); i++) {
+            Node temp = HTMLParser.parse(children.get(i).htmlText);
             children.set(i, temp);
         }
-        List<Node> resultList = children;
-        return resultList;
+        return children;
 
     }
 
-    private ArrayList<String> attributesParser()
-    {
+    private ArrayList<String> attributesParser() {
         ArrayList<String> attributesList = new ArrayList<>();
         String trimmedAttributes = attributes().trim();
         String[] keyAndValuePair = trimmedAttributes.split("\" ");
-        for (String temp : keyAndValuePair)
-        {
+        for (String temp : keyAndValuePair) {
             String[] tmpStr = temp.split("=");
             attributesList.add(tmpStr[0].replaceAll("\"",""));
             attributesList.add(tmpStr[1].replaceAll("\"",""));
@@ -86,21 +73,14 @@ public class Node implements NodeInterface
         return attributesList;
     }
 
-    private Map<String,String> attributesHashmap()
-    {
-        HashMap<String,String> attributesPair = new HashMap<>();
-        ArrayList<String> parsedAttributes = attributesParser();
-        for (int i = 0; i < parsedAttributes.size(); i += 2)
-        {
-            attributesPair.put(parsedAttributes.get(i),parsedAttributes.get(i + 1));
-        }
-        return attributesPair;
-    }
 
     @Override
-    public String getAttributeValue(String key)
-    {
-        Map<String,String> attributesPair = attributesHashmap();
+    public String getAttributeValue(String key) {
+        HashMap<String,String> attributesPair = new HashMap<>();
+        ArrayList<String> parsedAttributes = this.attributesParser();
+        for (int i = 0; i < parsedAttributes.size(); i += 2) {
+            attributesPair.put(parsedAttributes.get(i),parsedAttributes.get(i + 1));
+        }
         return attributesPair.get(key);
     }
 }
