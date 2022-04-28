@@ -13,6 +13,14 @@ public class Node implements NodeInterface {
     private final String openingTag;
     private final String closingTag;
 
+    public String getOpeningTag() {
+        return openingTag;
+    }
+
+    public String getClosingTag() {
+        return closingTag;
+    }
+
     public Node(String htmlString, String openingTag,
                 String closingTag,
                 Map<String,String> attributes) {

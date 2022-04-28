@@ -12,31 +12,22 @@ public class HTMLParser {
 
     public static Node parse(String html) {
         htmlString = html.replaceAll("\n", "").trim();
-        //making a new parent node
         Node madeNode = new Node(htmlString,
             getStartTag(),
             getEndTag(),
             attributesParser());
 
         removeEndAndStartTag();
-        /*
-        because from now on we want to extract the children of
-        this node, we delete the starting and closing tags
-        to only deal with the tags inside it
-         */
-        //to check if there are no tags left, if there isn't any left. we are done.
         boolean hasTags = (htmlString.contains("<"));
         if(!hasTags) {
             return madeNode;
         }
-        /*
-        makes a child node and adds it to its parent
-        and then deletes the child node from string html
-         */
         while(htmlString.length() > 0) {
-            System.out.println("jjj");
             madeNode.addChild(initializeNode());
-            removeTag();
+            //String before = htmlString;
+            htmlString = removeTag();
+            //String after = htmlString;
+            //System.out.println(after.equals(before));
         }
         return madeNode;
     }
@@ -56,7 +47,7 @@ public class HTMLParser {
             endOfStartTag++;
         }
         String startTag = htmlString.substring(0, endOfStartTag + 1);
-        return StringUtils.substringBetween(startTag, tagName(), ">").trim();
+        return StringUtils.substringBetween(startTag, tagName(), ">");
     }
 
     private static String tagName() {
@@ -75,19 +66,19 @@ public class HTMLParser {
 
     private static void removeEndAndStartTag() {
         htmlString = htmlString.replaceFirst(getStartTag(), "")
-            .replaceFirst(getEndTag(), "");
+            .replaceFirst(getEndTag(), "").trim();
     }
 
-    private static void removeTag() {
+    private static String removeTag() {
         String startTag = getStartTag();
         boolean isSingleTag = startTag.indexOf('<') + 1 == startTag.indexOf('/');
-        // to check if the tag is a single tag
+        System.out.println("opening\n" + startTag);
+        System.out.println("whole\n" + htmlString);
         if (isSingleTag) {
-            htmlString =  htmlString.replaceFirst(getStartTag(), "").trim();
-        } else {
-            htmlString = htmlString.replaceFirst(startTag + getStringInside()
-                + getEndTag(), "").trim();
+            return htmlString.replaceFirst(startTag, "").trim();
         }
+        return htmlString.replaceFirst(startTag + getStringInside()
+            + getEndTag(), "").trim();
     }
 
     private static Node initializeNode() {
@@ -121,7 +112,7 @@ public class HTMLParser {
         }
     }
 
-//    public static String toHTMLString(Node root) {
-//        return root.getStartTag() + root.getStringInside() + root.getEndTag();
-//    }
+    public static String toHTMLString(Node root) {
+        return root.getOpeningTag() + root.getStringInside() + root.getClosingTag();
+    }
 }
